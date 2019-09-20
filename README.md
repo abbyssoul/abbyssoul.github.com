@@ -1,6 +1,11 @@
 # [abbyssoul.github.com](abbyssoul.github.com/)
+[![TravisCI][travis-shield]][travis-link]
 
 This is my personal versioned dump of thoughts. I am sure there are many like it, but this one is mine own.
+
+[travis-shield]: https://travis-ci.org/abbyssoul/abbyssoul.github.com.svg?branch=master
+[travis-link]: https://travis-ci.org/abbyssoul/abbyssoul.github.com
+
 
 ## Powered by [jekyll](https://jekyllrb.com/)
 
