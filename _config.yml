@@ -27,6 +27,8 @@ url: "https://abbyssoul.github.com" # the base hostname & protocol for your site
 # twitter_username: abbyssoul
 github_username:  abbyssoul
 email: abyss.tech.blog@gmail.com
+# Google services
+google_analytics: UA-150379402-1
 
 # Build settings
 theme: minima
