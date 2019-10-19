@@ -16,7 +16,7 @@ Generally, when talking with colleagues with some engineering experience - there
 # What is an error?
 It might seems like an odd question to ask: "what is an error?". Surely we all _know_ one when we see it. And why would you have errors in your code in the first place? Shouldn't our programs be error-free?
 Yeah - real-world questions here.
-One way to think about a program is like _a_sequence of action_ to achieve some _goal_. For example: compute the result of a division of _two variables_;
+One way to think about a program is like _a sequence of action_ to achieve some _goal_. For example: compute the result of a division of _two variables_;
 _play_ the content of _that_ audio file; _display_ pictures of my favorite cat I have saved _over there_; let me _enter_ this data in _a file for the record_ and _create_ _a report_ based on that data.
 
 Notice something common - unlike _infamous_ "hello world" program that takes _no input_ and always produces the same _result_ no matter what - programs in examples are designed to solve real problems (such as displaying cat pictures!) -

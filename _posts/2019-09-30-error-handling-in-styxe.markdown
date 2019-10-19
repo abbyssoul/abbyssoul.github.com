@@ -79,7 +79,7 @@ This operation chaining does look familiar to C++ developers. What is missing is
 
 # Solution
 As another experiment, I chose to add a different set of `operator<<` overloads that take Result as an argument in addition to the classical
-`operator<<`.
+`operator<<`:
 
 {% highlight C++ %}
 Solace::Result<Decoder&, Error>

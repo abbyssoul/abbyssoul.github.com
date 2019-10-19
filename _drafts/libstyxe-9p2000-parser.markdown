@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "libstyxe - a 9P2000 parser"
+title:  "libstyxe: 9P2000 parser"
 date:   2019-09-27 12:00:00 +1000
 categories: [C++, styxe, 9p, plan9]
 ---
