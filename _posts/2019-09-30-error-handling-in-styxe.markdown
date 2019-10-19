@@ -18,13 +18,13 @@ return type of `Solace::Result<>`. However, if I were to add a new data type (fo
 Since designing `libstyxe` - I didn't want to use inheritance to extend classes - I been thinking how else we can do it a way that preserves error handling.
 
 ## Problem
-So our task is: to find a way for Ecoders and Decoder to be extensibility and reusable while keeping error reporting in the form:
+To find a way for Encoders and Decoder to be extensible and reusable while keeping error reporting in the familiar form of:
 {% highlight C++ %}
 
 ....
-  return ecoder.encode(value1)
-               .then([&]() { return ecoder.encode(value2);} );
-}
+  return encoder.encode(value1)
+               .then([&]() { return encoder.encode(value2); });
+
 {% endhighlight %}
 
 That is to say, Encoder can take different input types to decode. And encode operations are chainable such that
