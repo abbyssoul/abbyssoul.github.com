@@ -20,11 +20,8 @@ Since designing `libstyxe` - I didn't want to use inheritance to extend classes 
 ## Problem
 To find a way for Encoders and Decoder to be extensible and reusable while keeping error reporting in the familiar form of:
 {% highlight C++ %}
-
-....
   return encoder.encode(value1)
                .then([&]() { return encoder.encode(value2); });
-
 {% endhighlight %}
 
 That is to say, Encoder can take different input types to decode. And encode operations are chainable such that
@@ -97,7 +94,7 @@ Glad that one is done so now `Result<Value&, Error>` is a valid type.
 # Conclusion
 
 For a message parser and writer, the best error handling strategy seems to return an error to the caller. Safe for coding issues - there should be no places for `panic`. That is no need to throw exceptions. After all, if all your function does is converting from user input to value - it is reasonable to expect that a user-provided input can be invalid. The only challenge is to keep a nice interface to allow operation chaining. Using good old free-standing
-`operator<<` and `opeartor>>` fits the bill perfectly if this operators are allowed to return Result. That is each IO operation can fail.
+`operator<<` and `opeartor>>` fits the bill perfectly if these operators are allowed to return Result. That is each IO operation can fail.
 This requires a set of overloads that accepts `Result<Encoder&, E> ` and `Result<Decoder&, E>`.
 This may not be the most elegant solution but it is extensible at the cost of an extra overload for each new type conversion added. `
 I will write another post with the results of using this approach after a while.
