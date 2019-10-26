@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "libsolace on Conan-central"
-date:   2019-10-07 12:00:00 +1000
+date:   2019-10-26 13:00:00 +1000
 author: abbyssoul
 categories: [C++, solace, conan]
 ---
