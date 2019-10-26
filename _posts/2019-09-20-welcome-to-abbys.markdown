@@ -2,6 +2,7 @@
 layout: post
 title:  "Welcome to the Abyss"
 date:   2019-09-20 12:00:00 +1000
+author: abbyssoul
 categories: introduction
 ---
 Welcome to my personal blog space.

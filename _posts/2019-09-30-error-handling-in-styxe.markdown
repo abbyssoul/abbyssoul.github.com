@@ -2,6 +2,7 @@
 layout: post
 title:  "Error handling in styxe"
 date:   2019-09-30 09:00:00 +1000
+author: abbyssoul
 categories: C++ styxe error-handling
 ---
 Some details about the error handling approach as implemented in libstyxe.

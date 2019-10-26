@@ -2,6 +2,7 @@
 layout: post
 title:  "libsolace: library philosophy"
 date:   2019-10-07 12:00:00 +1000
+author: abbyssoul
 categories: [C++, solace, philosophy]
 ---
 
