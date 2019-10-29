@@ -2,23 +2,24 @@
 <html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
 <body>
+  {%- include header.html -%}
+  <main class="page-content" aria-label="Content">
+    <div id="main" role="main" class="container">
+      <aside>
+      {% include tags-list.html %}
+      </aside>
 
-    <main class="page-content" aria-label="Content">
-      <div id="main" role="main" class="container">
-        <aside>
-        {% include tags-list.html %}
-        </aside>
+      <section class="home">
+        {%- if page.title -%}
+          <h1 class="page-heading">{{ page.title }}</h1>
+        {%- endif -%}
 
-        <section class="home">
-          {%- if page.title -%}
-            <h1 class="page-heading">{{ page.title }}</h1>
-          {%- endif -%}
+        {{ content }}
 
-          {{ content }}
+      </section>
+    </div>
+  </main>
 
-        </section>
-      </div>
-    </main>
-    {%- include footer.html -%}
+  {%- include footer.html -%}
 </body>
 </html>
