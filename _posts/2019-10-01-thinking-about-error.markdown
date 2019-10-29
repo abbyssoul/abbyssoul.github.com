@@ -3,7 +3,8 @@ layout: post
 title:  "How to think about errors in your code"
 author: abbyssoul
 date:   2019-10-01 12:00:00 +1000
-categories: errors
+categories: engineering
+tags: [engineering, reliability, errors, philosophy]
 ---
 
 Let us talk a bit about what is an error in a software engineering context. And more importantly, what can we do when one happens.
@@ -87,7 +88,7 @@ _Regular_ - means applications that have all the data they need to perform an ac
 We can observe that these applications do have their input given at the start. It could have been a config file or a script. The point here is that the input is specified. The only problem is - it can be invalid: `zng` for example is invalid file format, file `rose.jpg` does not exist in a current directory. The output is also defined. Store results in a file. It is possible you don't have write permissions. Or disk space. In any case - an error here - is the failure to acquire input or output resources. And the way to resolve it - is to correct inputs.  The only interesting twist is that if you specify the output device as part of your input - this is an input error. Confusing :)
 An example of an output error - is if you print something and printer jammed in the middle of a print. (note to self: does anybody still prints things?). Ok maybe - `netcat <remote_ip>` and drop WiFi in the middle of transmission. The point is - output can fail too.
 So what we do in this case - we try again. That is to say that the whole _process_ can be terminated at the point of error. Important note: all the inputs are immediately available. So a process can be restarted. In most cases it is also reasonable to assume that no output has been persisted as error prevented an app from producing one.  
-(yeah yeah I know - `netcat` can read from stdin, or a pipe with ephemeral results - this was just to illustrate a point)
+(yeah yeah I know - `netcat` can read from `stdin`, or a pipe with ephemeral results - this was just to illustrate a point)
 
 A different story when a process is responsible for the acquisition of data and its transformations. _Single player games_ come to mind as examples most users may be familiar with. A player smashing controls and some action takes place on the screen. Although in this case, we don't expect a user to press an unsupported button.
 A service or job queue worker is a different example of the same concept - the input is acquired from some kind of a source is not known beforehand. In this case, input itself can be an invalid message. But it should not result in interruption of service.

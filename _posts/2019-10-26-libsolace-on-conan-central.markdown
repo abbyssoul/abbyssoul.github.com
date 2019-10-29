@@ -1,15 +1,16 @@
 ---
 layout: post
-title:  "libsolace on Conan-central"
+title:  "libsolace is now on Conan-central"
 date:   2019-10-26 13:00:00 +1000
 author: abbyssoul
-categories: [C++, solace, conan]
+categories: [announcement]
+tags: [c++, solace, conan]
 ---
-
 
 ![Good news, everyone!](http://www.quickmeme.com/img/be/beeea97c622c5614a80371eb0aece7082a3ff1b50421cf5acae3125c65ba5d8f.jpg)
 
 Libsolace is now available via [Conan central][libsolace-conan-latest].
+
 
 > Conan is an open-source, decentralized and multi-platform
 package manager.

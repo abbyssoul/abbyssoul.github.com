@@ -3,7 +3,8 @@ layout: post
 title:  "Error handling in styxe"
 date:   2019-09-30 09:00:00 +1000
 author: abbyssoul
-categories: C++ styxe error-handling
+categories: engineering
+tags: [c++, styxe, errors, engineering, reliability]
 ---
 Some details about the error handling approach as implemented in libstyxe.
 
@@ -20,10 +21,10 @@ Since designing `libstyxe` - I didn't want to use inheritance to extend classes 
 
 ## Problem
 To find a way for Encoders and Decoder to be extensible and reusable while keeping error reporting in the familiar form of:
-{% highlight C++ %}
+```cpp
   return encoder.encode(value1)
                .then([&]() { return encoder.encode(value2); });
-{% endhighlight %}
+```
 
 That is to say, Encoder can take different input types to decode. And encode operations are chainable such that
 if one operation failed, the following is not performed.
@@ -34,7 +35,7 @@ Oh, do that without using inheritance!
 # Options
 Initial implementation of `styxe::Encoder` and `styxe::Decoder` were designed to return `Solace::Result` for each operation:
 
-{% highlight C++ %}
+```cpp
 styxe::Encoder encoder{...};
 
 auto result = encoder.encode(my_value);
@@ -45,16 +46,16 @@ result = encoder.encode(my_other_value);
 if (!result)
   return result.getError();
 
-{% endhighlight %}
+```
 
 This is all fine and familiar, but my personal experience suggests that [error handling
 is not optional][optional-failure] (all puns intended). That is if error handling can be ignored chances are it will be ignored.
 Most likely when it is needed. In code terms it means nothing stopping someone from writing code like this:
 
-{% highlight C++ %}
+```cpp
   encoder.encode(my_value);
   encoder.encode(my_other_value);
-{% endhighlight %}
+```
 
 It is obviously shorter to read. It also has less obvious issues: if the first `encode` operation fails, second should not be called.
 That is to say, we want to have robust error handling. Throwing an exception to signal an error is an option. Except it does not
@@ -67,14 +68,14 @@ It is also a topic of various error handling technique has been discussed [many 
 For the purpose of libstyxe design, while the discussion is still raging on, I wanted something easy to use and reusable. Maybe even composable?  
 Wouldn't it be nice to write:
 
-{% highlight C++ %}
+```cpp
 
 Result<void, Error> writeSomething(...) {
   ...
   return encoder << my_value
                  << my_other_value;  
 }
-{% endhighlight %}
+```
 
 This operation chaining does look familiar to C++ developers. What is missing is conversion to a `Result<>`
 
@@ -82,10 +83,10 @@ This operation chaining does look familiar to C++ developers. What is missing is
 As another experiment, I chose to add a different set of `operator<<` overloads that take Result as an argument in addition to the classical
 `operator<<`:
 
-{% highlight C++ %}
+```
 Solace::Result<Decoder&, Error>
 operator>> (Solace::Result<Decoder&, Error>&& decoder, Solace::uint64& dest);
-{% endhighlight %}
+```
 
 This allows me to have operation chains and to return a result. Exactly as a target solution.
 

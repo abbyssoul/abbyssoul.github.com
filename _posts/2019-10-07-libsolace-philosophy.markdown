@@ -3,7 +3,8 @@ layout: post
 title:  "libsolace: library philosophy"
 date:   2019-10-07 12:00:00 +1000
 author: abbyssoul
-categories: [C++, solace, philosophy]
+categories: engineering
+tags: [solace, c++, engineering, reliability, philosophy]
 ---
 
 It is no secret that software is all around as this days. It runs traffic lights, washing machines, cars, businesses etc. Every type you plan a trip - your booking is processed online by a data centre. The plain you travel on is control by the software. As is the airport you travel to and from. And not even touching on medical equipment and production plants.
@@ -31,14 +32,14 @@ A major take away for me was to write maintainable code in terms of size and rea
 
 For example, it is easy to pre-allocate memory for a vector and ensure no resize penalties. Unfortunately, it is also easy to omit a call to `vector.reserve()` with no noticeable consequences.
 What if it was impossible to create a vector without pre-allocation? Of course, we can use a custom `create` function to get an instance of a vector:
-{% highlight C++ %}
+```c++
 template<typename T>
 auto makeVector(size_t initialSize) {
     std::vector<T> result;
     result.reserve(initialSize);
     return result;
 }
-{% endhighlight %}
+```
 
 Notice there is no memory copy penalty when using C++ 17 due to [copy elision](https://en.cppreference.com/w/cpp/language/copy_elision).
 
@@ -81,42 +82,42 @@ One example of composition of components in [libSolace][libsolace-git] is design
 These classes model a simple stateful data stream. That is a fancy way to say a byte array with an integer denoting current position to read from / write to. `ByteReaded` and `ByteWriter`
 operate over a memory buffer. A simples use case is to have a static C-style array you would like to write data to:
 
-{% highlight C++ %}
+```c++
 
 MyData my_data = ...;
 byte data[256];
 ByteWriter writer{wrapMemory(data)};
 writer << my_data.x << my_data.y << message;
 
-{% endhighlight %}
+```
 
 This snippet demonstrates how ByteWriter can be used to serialize data into a user-provided byte array.
 But the libsolace also provides memory management facilities. So a user can allocate a _memory resource_ dynamically and use it to write data to:
 
-{% highlight C++ %}
+```c++
 
 MyData my_data = ...;
 MemoryResource memory = memoryManage.allocate(321).unwrap();
 ByteWriter writer{memory};
 writer << my_data.x << my_data.y << message;
 
-{% endhighlight %}
+```
 
 In this example ByteWriter is using dynamically allocated memory buffer as a write target. It is also possible to move memory resource into ByteWriter for it to take ownership of the resource
-{% highlight C++ %}
+```c++
 ByteWriter writer{memoryManage.allocate(321).unwrap()};
 writer << my_data.x << my_data.y << message;
-{% endhighlight %}
+```
 
 In this case - the memory will be de-allocated when the `writer` goes out of scope.
 
 
 These examples illustrate an important point - a library user is not required to use a memory manager or memory resources to use `ByteReaded` and `ByteWriter`.
 It may be a good idea in some cases but not in others. For example if you need to interop with STL/ legacy code:
-{% highlight C++ %}
+```c++
 std::vector<uint8_t> buf = ...;
 ByteReader reader{wrapMemory(buf.data(), buf.size())};
-{% endhighlight %}
+```
 
 This way you are free to pick and chose components that are required for your solution.
 
