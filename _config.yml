@@ -107,6 +107,7 @@ kramdown:
 #   - vendor/gems/
 #   - vendor/ruby/
 exclude:
+  - script
   - vendor
   - Gemfile
   - Gemfile.lock

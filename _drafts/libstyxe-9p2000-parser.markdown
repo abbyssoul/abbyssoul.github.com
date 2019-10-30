@@ -2,7 +2,8 @@
 layout: post
 title:  "libstyxe: 9P2000 parser"
 date:   2019-09-27 12:00:00 +1000
-categories: [C++, styxe, 9p, plan9]
+categories: engineering
+tags: [c++, styxe, errors, engineering, 9p, plan9]
 ---
 
 I my spare time I am working on a pet distributed system of mine. The kind where multiple processes all running on different machines (raspberry PIs, Jeton Nanos and x86 server) - all do its own thing and come together to advance a common goal. This kind. So while working on this project I realised that

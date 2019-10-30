@@ -1,4 +1,4 @@
-# [abbyssoul.github.com](abbyssoul.github.com/)
+# [abbyssoul.github.io]( https://abbyssoul.github.io)
 [![TravisCI][travis-shield]][travis-link]
 
 This is my personal versioned dump of thoughts. I am sure there are many like it, but this one is mine own.

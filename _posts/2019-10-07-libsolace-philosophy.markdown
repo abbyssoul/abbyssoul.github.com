@@ -21,7 +21,7 @@ To build such good software engineers must to follow good engineering practices.
 I wanted to collect primitives that enable me to build different applications. Such collection is known as a _library_:
 > a collection of types, functions, classes, etc. implementing a set of facilities (abstractions) meant to be potentially used as part of more that one program.
 >
-> -[Cpp Code guidelines gloassay](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#glossary)
+> -[Cpp Code guidelines glossary](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#glossary)
 
 Since we are foremost interested in reliability we should first identify some principles that a library must follow to be a foundation of reliable software.
 One such principle - is the property of architecture where using it incorrectly is difficult, better yet impossible.
