@@ -15,7 +15,7 @@ Here I am going to share an approach I settled on when designing a libraries: [l
 
 Generally, when talking with colleagues with some engineering experience - there is always a consensus that errors _do happen_. There is, however, rarely an agreement of what an error is?
 
-# What is an error?
+## What is an error?
 It might seems like an odd question to ask: "what is an error?". Surely we all _know_ one when we see it. And why would you have errors in your code in the first place? Shouldn't our programs be error-free?
 Yeah - real-world questions here.
 One way to think about a program is like _a sequence of action_ to achieve some _goal_. For example: compute the result of a division of _two variables_;
@@ -35,7 +35,7 @@ And not money on account A anymore.
 Surprisingly it actually can get even hairier when we consider sequences across multiple systems - distributed across multiple machines in different data centers.
 
 
-# Brief overview of errors
+### Brief overview of errors
 
 When researching a topic of error handling for a proper article, the best I came across was a classification of errors based on when they happen. Syntax, runtime, and logic errors.
 This is repeated across a countless number of blogs. I found this misleading and most unhelpful. For one - if this is the orderer list - logic error should precede compile-time errors :) You need to make a
@@ -57,7 +57,7 @@ _Category of runtime errors_ - is the broadest one. And most [expensive][cost-of
 
 There is also an important dimension of this classification that is not always mentioned. Frequency and severity of the error happening.
 
-# Thinking about errors
+## Thinking about errors
 
 All the above classification is of little help when it comes to handing the actual error in runtime. So what can we do?
 In order to identify what actions can be taken in case of an error occurred, let's consider different types of applications. There are 'hello world', and real-world applications that some take input and produce some output.
@@ -98,7 +98,7 @@ spawning a new process for each request takes too long and each process has memo
 In order to fight memory overhead of processes - some servers chose to handle requests in threads. In fact, most modern web-servers are threading based.
 
 
-# Conclusion
+## Conclusion
 
 In this post, I tried to untangle the mess of error handling. Going beyond simple bugs in the implementation, errors can occur in a course of normal operation. Failures DO HAPPEN and an application must have a strategy to detail with it.
 Crashing the app may be a perfectly valid way for simple apps. In case the app does not deal with input acquisition itself but gets all it needs from the start. User-facing apps can produce: "Invalid input - correct and restart".

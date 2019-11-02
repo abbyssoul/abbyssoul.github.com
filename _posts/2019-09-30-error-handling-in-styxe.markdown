@@ -6,9 +6,9 @@ author: abbyssoul
 categories: engineering
 tags: [c++, styxe, errors, engineering, reliability]
 ---
-Some details about the error handling approach as implemented in libstyxe.
 
-# Intro
+In this post I'd like to discuss details the error handling approach as implemented in libstyxe.
+
 [libstyxe][libstyxe-git] is a somewhat simple library - its only job is to parse 9P messages out of a user-provided bytes. And write such messages into a byte stream.
 In this case, the error handling strategy is to report the error back to the caller informing them of the invalid input.
 That is if the library itself has no implementation issues. Will unit testing should help find later. So let us take a closer look at implementation details
@@ -32,7 +32,7 @@ if one operation failed, the following is not performed.
 Oh, do that without using inheritance!
 
 
-# Options
+## Options
 Initial implementation of `styxe::Encoder` and `styxe::Decoder` were designed to return `Solace::Result` for each operation:
 
 ```cpp
@@ -79,7 +79,7 @@ Result<void, Error> writeSomething(...) {
 
 This operation chaining does look familiar to C++ developers. What is missing is conversion to a `Result<>`
 
-# Solution
+## Solution
 As another experiment, I chose to add a different set of `operator<<` overloads that take Result as an argument in addition to the classical
 `operator<<`:
 
@@ -93,7 +93,7 @@ This allows me to have operation chains and to return a result. Exactly as a tar
 The only challenge was to add support to [libsolace][libsolace-git] Result for returning Reference types.
 Glad that one is done so now `Result<Value&, Error>` is a valid type.
 
-# Conclusion
+## Conclusion
 
 For a message parser and writer, the best error handling strategy seems to return an error to the caller. Safe for coding issues - there should be no places for `panic`. That is no need to throw exceptions. After all, if all your function does is converting from user input to value - it is reasonable to expect that a user-provided input can be invalid. The only challenge is to keep a nice interface to allow operation chaining. Using good old free-standing
 `operator<<` and `opeartor>>` fits the bill perfectly if these operators are allowed to return Result. That is each IO operation can fail.
