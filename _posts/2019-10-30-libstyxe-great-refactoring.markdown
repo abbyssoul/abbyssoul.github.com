@@ -38,8 +38,8 @@ This design worked for a while.
 
 ## Why change anything?
 9p is not a single a protocol. Several 'flavours' has been created over time. Notably:
-- [9p2000.u](https://ericvh.github.io/9p-rfc/rfc9p2000.u.html) - is Unix adoption.
-- [9p2000.L](https://github.com/chaos/diod/blob/master/protocol.md) - is extension over 9p2000.u
+- [9p2000.u](https://ericvh.github.io/9p-rfc/rfc9p2000.u.html) - "is a set of extensions to the 9P protocol to better support UNIX environments connecting to Plan 9 file servers and UNIX environments connecting to other UNIX environments".
+- [9p2000.L](https://github.com/chaos/diod/blob/master/protocol.md) - is extra set of extensions over 9p2000.u
 - [9p2000.e](https://github.com/cloudozer/ling/blob/master/doc/9p2000e.md) - is Erlang on Xen extensions that adds short read and short write messages. This minimized network round-trip.
 
 My initial plan was to implement the smallest subset - that is `9p2000`. But after some time using a protocol on my server - I realized that some things could be streamlined to minimize network traffic. Also, if a server implements Unix-style user ids - 9p2000.u is a better fit.
