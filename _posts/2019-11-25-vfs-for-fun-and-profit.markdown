@@ -6,7 +6,7 @@ categories: engineering
 tags: [c++, engineering, vfs, kasofs]
 ---
 
-When we use computers these days, we take for granted the fact that our data - documents, pictures, music, etc - persisted. We are pretty happy to find a document we were working on if we can recall what we named it. So we are very familiar with the idea of a filesystem. A system that allows us to store and locate named files.
+When we use computers these days, we take for granted the fact that our data - documents, pictures, musicWhen we use computers these days, we take for granted the fact that our data - documents, pictures, music, etc - persisted. We are pretty happy to find a document we were working on if we can recall what we named it. So we are very familiar with the idea of a filesystem. A system that allows us to store and locate named files.
 As often the case - things get a bit more interesting in the realm of distributed systems. Fundamentally we still need a way to find stored data.
 It's just that we don't always care where is it physically located. What is important is the path to a file.
 A bit more general - we need an address of a resource we would like to access.
@@ -15,12 +15,27 @@ I have been working on my own library for it.
 
 
 # What is an FS?
-A filesystem was initially designed as a means to store computation state. Over time actual storage medium changed, and the need to store and read data remained.
-This required the system that the application developer interacted with to be abstracted. This abstract concept of storage became known as the filesystem.
-Thus in a classic sense, a filesystem is an API provided by an operating system that allows users of a computer system to store data and later access it. This process must work with storage medium details varying from configuration to configuration. This leads to the realisation that access to the data is more important than the fact of its storage.
+A filesystem was initially designed as a means to store computation state. Over time actual storage medium changed, and the need to store and read data remained. Application developers wanted to focus on useful computation that app performed and not on supporting various hardware that application may end running on. And so the system that the application interacted with to store data was abstracted. This abstract concept of storage became known as the filesystem.
+Thus in a classic sense, a filesystem is an API provided by an operating system that allows users of a computer system to store data and later access it. This process must work with storage medium details varying from configuration to configuration. Which leads to the realisation that access to the data is more important than the fact of its storage.
 If we drop the notion of persistent storage - we allow for data to come from anywhere. It can be computed on request. For example, reading a value from sensors, data from a remote server or kernel itself. For computer - everything is a data.
 
 _Filesystem is just a way to access named data_. So _virtual filesystem_ is a recognition of the fact that is it is not as important where data physically stored. But it is essential how to access it.
+
+Filesystem as a concept is a mapping of a hierarchical name to an object with some expected operations. Namely read and write.
+Here I mean mapping in the mathematical sense. There exists a function that accepts `path` and produces, or maps it to an object.
+In pseudo code it will be something like:
+
+```c++
+Filesystem fs;
+auto maybeFile = fs.fileByName(path);
+```
+
+There are two critical things to note here:
+There is no guarantee that the mapping `path` to `file` exists for any path. Or simply, not every path results in a file.  
+Path is hierarchical. Two distinct path object can refer to the same file object.
+The reason why this is important is that it might be tempting to compare a filesystem to key/value storage. Or assume that in OOP such system can be replaced by a simple `map`/`dictionary`/`hashmap`/etc.
+
+Real filesystems provide more operations than just mapping. It also allows the listing of items in directories or walks up and down the hierarchy.
 
 ### What is a File?
 For this post, a `file` is a nameable _object_ that has _write_ and/or _read_ operations defined on it.
