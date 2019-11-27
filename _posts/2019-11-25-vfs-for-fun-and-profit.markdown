@@ -6,8 +6,7 @@ categories: engineering
 tags: [c++, engineering, vfs, kasofs]
 ---
 
-When we use computers this days, we take for granted the fact that our data - documents, pictures, music, etc - persisted. We are pretty happy to find
-a document we were working on if we can recall what we named it. So we are very familiar with the idea of a filesystem. A system that allows us to store and locate named files.
+When we use computers these days, we take for granted the fact that our data - documents, pictures, music, etc - persisted. We are pretty happy to find a document we were working on if we can recall what we named it. So we are very familiar with the idea of a filesystem. A system that allows us to store and locate named files.
 As often the case - things get a bit more interesting in the realm of distributed systems. Fundamentally we still need a way to find stored data.
 It's just that we don't always care where is it physically located. What is important is the path to a file.
 A bit more general - we need an address of a resource we would like to access.
@@ -17,8 +16,8 @@ I have been working on my own library for it.
 
 # What is an FS?
 A filesystem was initially designed as a means to store computation state. Over time actual storage medium changed, and the need to store and read data remained.
-The required the system that application developer interacted with to be abstracted. This abstract concept of storage became known as filesystem.
-Thus in a classic sense, a filesystem is an API provided by operating system that allows users of a computer system to store data and later access it. With storage medium detail vareing from configuration to configuration. This leads to realisation that access to the data is more important than the fact of its storage.
+This required the system that the application developer interacted with to be abstracted. This abstract concept of storage became known as the filesystem.
+Thus in a classic sense, a filesystem is an API provided by an operating system that allows users of a computer system to store data and later access it. This process must work with storage medium details varying from configuration to configuration. This leads to the realisation that access to the data is more important than the fact of its storage.
 If we drop the notion of persistent storage - we allow for data to come from anywhere. It can be computed on request. For example, reading a value from sensors, data from a remote server or kernel itself. For computer - everything is a data.
 
 _Filesystem is just a way to access named data_. So _virtual filesystem_ is a recognition of the fact that is it is not as important where data physically stored. But it is essential how to access it.
@@ -27,7 +26,7 @@ _Filesystem is just a way to access named data_. So _virtual filesystem_ is a re
 For this post, a `file` is a nameable _object_ that has _write_ and/or _read_ operations defined on it.
 Note in this definition a file is just something one can write into or read from or both. Also, we can find it later by name. Or the hierarchy of names also known as _path_.
 
-### What good are VFS?
+### What good is VFS?
 So filesystem as a concept is a mapping of a hierarchical name into an object with some expected operations. What can we do with it?
 One example of virtual filesystem a reader may be familiar with is a [procfs][procfs]. The idea proposed for Unix that processes running by OS can be represented as files.
 Not stored files, but OS can give us this information on request. In Linux, this is implemented as `/proc`. Every time a user reads from this directory, Linux kernel handles the request and reply with information about currently running processes.
