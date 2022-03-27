@@ -25,5 +25,6 @@ Just make sure to use [latest version][libsolace-conan-latest].
 
 Let me know if you find it useful or you are using a different package manager for your code.
 
-[libsolace-conan-latest]: https://bintray.com/conan/conan-center/libsolace%3A_/_latestVersion
+[libsolace-conan-latest]: https://conan.io/center/libsolace
 [libsolace-git]: https://github.com/abbyssoul/libsolace
+[conan-center]: https://conan.io/center/

@@ -9,7 +9,7 @@ Hi there and welcome.
 My name is Ivan Ryabov and I am a software engineer and this is a personal blog space.
 
 
-If you would like to connect you can follow me on [github](https://github.com/abbyssoul).
+If you would like to connect you can follow me on [github](https://github.com/abbyssoul/).
 In case you are interested in my CV here is my [LinkedIn](https://www.linkedin.com/in/iryabov/).
 
 Disclaimer: Any opinions expressed here are my personal and do not reflect my employers.
