@@ -16,7 +16,7 @@ source "https://rubygems.org"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-  gem 'github-pages', '~> 227'
+  gem 'github-pages', '~> 228'
   # gem "jekyll-feed", "~> 0.12"
   gem "jekyll-redirect-from"
   gem "jekyll-sitemap"
