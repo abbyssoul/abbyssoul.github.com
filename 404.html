@@ -1,25 +1,588 @@
 ---
 permalink: /404.html
-layout: default
+layout: custom
+title: 404 - State Unreachable
 ---
-
-<style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
+<style>
+  body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #080317;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
   }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
+
+  #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+  }
+
+  /* CRT Scanline Overlay */
+  .scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+      background-size: 100% 4px;
+      z-index: 10;
+      pointer-events: none;
+  }
+
+  /* Glitch Flash Overlay */
+  .glitch-flash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 255, 255, 0.05);
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.1s;
+  }
+
+  .terminal-ui {
+      position: absolute;
+      bottom: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      text-align: center;
+      pointer-events: none;
+      width: 100%;
+  }
+
+  .status {
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px #a855f7;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      color: #d8b4fe;
+      animation: pulse 2.5s infinite;
+  }
+
+  .sub-status {
+      font-size: 0.85rem;
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
+      margin-bottom: 25px;
+      opacity: 0.8;
+  }
+
+  .return-link {
+      display: inline-block;
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid #a855f7;
+      padding: 12px 24px;
+      background: rgba(168, 85, 247, 0.1);
+      pointer-events: auto;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+  }
+
+  .return-link:hover {
+      background: #a855f7;
+      color: #000;
+      box-shadow: 0 0 20px #a855f7, inset 0 0 10px #fff;
+  }
+
+  @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
   }
 </style>
+<body>
+    <div class="scanlines"></div>
+    <div class="glitch-flash" id="glitch-flash"></div>
+    <div id="canvas-container"></div>
 
-<div class="container">
-  <h1>404</h1>
+    <div class="terminal-ui">
+        <div class="status">ERR: TEMPLE STATE UNREACHABLE</div>
+        <div class="sub-status">CONSENSUS PROTOCOL HALTED // ACTIVE NODE DESERTED</div>
+        <a href="/" class="return-link">Rejoin Cluster</a>
+    </div>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
-</div>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> -->
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.min.js"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from 'three';
+
+        const container = document.getElementById('canvas-container');
+        const glitchFlash = document.getElementById('glitch-flash');
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        // Deep void fog to hide the edges of the floor
+        scene.fog = new THREE.FogExp2(0x030108, 0.000075);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+        camera.position.set(0, 30, 250);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // --- INTERACTION VARS ---
+        const mouse = new THREE.Vector2();
+        const mouseScreen = { x: 0, y: 0 }; // For parallax
+        let time = 0;
+        let isGlitching = false;
+
+        // --- 1. TWO FLOORS: DESERT (STATIC) & DATA TEMPLE (HIDDEN) ---
+        const floorWidth = 2000;
+        const floorDepth = 2000;
+        const floorSegments = 60;
+        
+        // Desert Floor
+        const desertGeo = new THREE.PlaneGeometry(floorWidth, floorDepth, floorSegments, floorSegments);
+        desertGeo.rotateX(-Math.PI / 2);
+        
+        const posAttr = desertGeo.attributes.position;
+        for(let i = 0; i < posAttr.count; i++) {
+            const x = posAttr.getX(i);
+            const z = posAttr.getZ(i);
+            
+            // Create a hill at (0, -150)
+            const dx = x - 0;
+            const dz = z - (-150);
+            const distToHill = Math.sqrt(dx*dx + dz*dz);
+            // A gentle hill peak
+            const hillHeight = Math.max(0, 40 * Math.cos(Math.min(Math.PI/2, distToHill * 0.01)));
+            
+            // Random barren noise
+            const noise = (Math.random() - 0.5) * 4;
+            
+            posAttr.setY(i, hillHeight + noise);
+        }
+        desertGeo.computeVertexNormals();
+
+        const desertMat = new THREE.MeshBasicMaterial({ 
+            color: 0x3b2e5a, // Dark barren night (slightly purplish for mood)
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.4 
+        });
+        const desertFloor = new THREE.Mesh(desertGeo, desertMat);
+        desertFloor.position.y = -80;
+        scene.add(desertFloor);
+
+        // Data Temple Floor (Hidden)
+        const dataGeo = new THREE.PlaneGeometry(floorWidth, floorDepth, 30, 30);
+        dataGeo.rotateX(-Math.PI / 2);
+        const dataMat = new THREE.MeshBasicMaterial({ 
+            color: 0x00ffff, // Cyan wireframe grid
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.6 
+        });
+        const dataFloor = new THREE.Mesh(dataGeo, dataMat);
+        dataFloor.position.y = -80;
+        dataFloor.visible = false;
+        scene.add(dataFloor);
+
+        // --- 2. CYBER TREE (Procedural Generation) ---
+        const treeGroup = new THREE.Group();
+        const treeLinesGeo = new THREE.BufferGeometry();
+        const linePositions = [];
+        const lineColors = [];
+        
+        const leafGeo = new THREE.BufferGeometry();
+        const leafPositions = [];
+        const leafColors = [];
+
+        const colorCyan = new THREE.Color(0x2dd4bf);
+        const colorPurple = new THREE.Color(0xc084fc);
+        const colorDeepPurple = new THREE.Color(0x581c87);
+
+        function buildBranch(startVec, length, pitch, yaw, depth) {
+            const maxDepth = 8;
+            
+            // Calculate end point
+            const endX = startVec.x + length * Math.sin(yaw) * Math.cos(pitch);
+            const endY = startVec.y + length * Math.sin(pitch);
+            const endZ = startVec.z + length * Math.cos(yaw) * Math.cos(pitch);
+            const endVec = new THREE.Vector3(endX, endY, endZ);
+
+            // Add line segment
+            linePositions.push(startVec.x, startVec.y, startVec.z);
+            linePositions.push(endVec.x, endVec.y, endVec.z);
+
+            // Interpolate color based on depth
+            let c = colorDeepPurple.clone().lerp(colorPurple, depth / maxDepth);
+            lineColors.push(c.r, c.g, c.b, c.r, c.g, c.b);
+
+            if (depth < maxDepth) {
+                const branches = Math.floor(Math.random() * 2) + 2;
+                for (let i = 0; i < branches; i++) {
+                    const lMod = length * (Math.random() * 0.2 + 0.65);
+                    const pMod = pitch + (Math.random() - 0.3) * 0.7; // Bias upwards
+                    const yMod = yaw + (Math.random() - 0.5) * 1.5;
+                    buildBranch(endVec, lMod, pMod, yMod, depth + 1);
+                }
+            } else {
+                // Add leaves/data nodes at branch tips
+                for(let i=0; i<3; i++) {
+                    leafPositions.push(
+                        endVec.x + (Math.random()-0.5)*10, 
+                        endY + (Math.random()-0.5)*10, 
+                        endVec.z + (Math.random()-0.5)*10
+                    );
+                    const lc = Math.random() > 0.5 ? colorCyan : colorPurple;
+                    leafColors.push(lc.r, lc.g, lc.b);
+                }
+            }
+        }
+
+        // Start tree generation from origin
+        buildBranch(new THREE.Vector3(0, 0, 0), 60, Math.PI / 1.8, Math.PI/10, 0);
+
+        treeLinesGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        treeLinesGeo.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 3));
+        
+        const treeMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.8 });
+        const treeMesh = new THREE.LineSegments(treeLinesGeo, treeMat);
+        treeGroup.add(treeMesh);
+
+        leafGeo.setAttribute('position', new THREE.Float32BufferAttribute(leafPositions, 3));
+        leafGeo.setAttribute('color', new THREE.Float32BufferAttribute(leafColors, 3));
+        
+        const leafMat = new THREE.PointsMaterial({ size: 3, vertexColors: true, transparent: true, opacity: 0.9 });
+        const leafPoints = new THREE.Points(leafGeo, leafMat);
+        treeGroup.add(leafPoints);
+
+        // Position tree deep in the scene, anchored to the hill peak
+        treeGroup.position.set(0, -40, -150);
+        scene.add(treeGroup);
+
+
+        // --- 3. 404 TEXT PARTICLES ---
+        let textParticles;
+        const particleData = []; // Store physics data
+
+        function generateTextParticles() {
+            // Use off-screen canvas to get text layout
+            const tCanvas = document.createElement('canvas');
+            tCanvas.width = 1000;
+            tCanvas.height = 400;
+            const tCtx = tCanvas.getContext('2d', { willReadFrequently: true });
+            
+            tCtx.fillStyle = 'white';
+            tCtx.font = 'bold 240px "Courier New"';
+            tCtx.textAlign = 'center';
+            tCtx.textBaseline = 'middle';
+            tCtx.fillText('404', 500, 200);
+
+            const imgData = tCtx.getImageData(0, 0, 1000, 400).data;
+            
+            const pGeo = new THREE.BufferGeometry();
+            const pPos = [];
+            const pCol = [];
+
+            // Sample density
+            const step = 4;
+            
+            for (let y = 0; y < 400; y += step) {
+                for (let x = 0; x < 1000; x += step) {
+                    const idx = (y * 1000 + x) * 4;
+                    if (imgData[idx + 3] > 128) {
+                        // Map 2D coordinates to 3D space, centering it
+                        const worldX = (x - 500) * 0.8;
+                        const worldY = -(y - 200) * 0.8 + 40; // Flip Y and offset up
+                        const worldZ = 50; // Place in front of the tree
+
+                        // Add slight jitter
+                        const jX = worldX + (Math.random()-0.5)*2;
+                        const jY = worldY + (Math.random()-0.5)*2;
+                        const jZ = worldZ + (Math.random()-0.5)*10;
+
+                        pPos.push(jX, jY, jZ);
+
+                        // Gradient color based on X position
+                        const ratio = x / 1000;
+                        let c;
+                        if (ratio < 0.4) c = new THREE.Color(0x10b981); // Emerald
+                        else if (ratio < 0.7) c = new THREE.Color(0x3b82f6); // Blue
+                        else c = new THREE.Color(0xa855f7); // Purple
+
+                        pCol.push(c.r, c.g, c.b);
+
+                        // Store physics data
+                        particleData.push({
+                            baseX: worldX, baseY: worldY, baseZ: worldZ,
+                            vx: 0, vy: 0, vz: 0
+                        });
+                    }
+                }
+            }
+
+            pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pPos, 3));
+            pGeo.setAttribute('color', new THREE.Float32BufferAttribute(pCol, 3));
+
+            const pMat = new THREE.PointsMaterial({ 
+                size: 2.5, 
+                vertexColors: true, 
+                transparent: true, 
+                opacity: 0.9,
+                sizeAttenuation: true
+            });
+
+            textParticles = new THREE.Points(pGeo, pMat);
+            scene.add(textParticles);
+        }
+
+        generateTextParticles();
+
+        // --- 4. DATA RAIN (Symbolic Desert Rain) ---
+        const rainGroup = new THREE.Group();
+        const rainCount = 256; // Total particles
+        const rainChars = ['0', '1', 'λ', 'Σ', 'Φ', 'Δ', '4', '0', 'X', 'ERR'];
+        const rainDataByMat = rainChars.map(() => []);
+
+        rainChars.forEach((char, index) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 64, 64);
+            ctx.fillStyle = '#ffffff'; 
+            ctx.font = char === 'ERR' ? 'bold 22px "Courier New"' : 'bold 44px "Courier New"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(char, 32, 32);
+            
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.PointsMaterial({
+                size: 14,
+                map: tex,
+                transparent: true,
+                opacity: 0.9,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending,
+                vertexColors: true
+            });
+            
+            const countForChar = Math.floor(rainCount / rainChars.length);
+            const positions = [];
+            const colors = [];
+            
+            for (let i = 0; i < countForChar; i++) {
+                const x = (Math.random() - 0.5) * 800;
+                const y = Math.random() * 400 + 50;
+                const z = (Math.random() - 0.5) * 600 - 600;
+                
+                positions.push(x, y, z);
+                
+                // Neon colors: cyan, purple, or rare pink
+                const rand = Math.random();
+                let baseColor;
+                if (rand < 0.4) baseColor = new THREE.Color(0x00ffff); // Cyan
+                else if (rand < 0.8) baseColor = new THREE.Color(0xa855f7); // Purple
+                else baseColor = new THREE.Color(0xf472b6); // Pink
+
+                colors.push(baseColor.r, baseColor.g, baseColor.b);
+                
+                rainDataByMat[index].push({
+                    speed: Math.random() * 0.8 + 0.25,
+                    baseColor: baseColor
+                });
+            }
+            
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            const points = new THREE.Points(geo, mat);
+            rainGroup.add(points);
+        });
+        scene.add(rainGroup);
+
+
+        // --- ANIMATION LOOP ---
+        // Raycaster for accurate 3D mouse interaction
+        const raycaster = new THREE.Raycaster();
+        const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), -50); // Intersect plane near text
+
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.016;
+
+            // 1. Random Glitches (Swap Reality)
+            if (Math.random() < 0.005 && !isGlitching) {
+                isGlitching = true;
+                glitchFlash.style.opacity = '1';
+                desertFloor.visible = false;
+                dataFloor.visible = true;
+                
+                setTimeout(() => { 
+                    isGlitching = false; 
+                    glitchFlash.style.opacity = '0';
+                    desertFloor.visible = true;
+                    dataFloor.visible = false;
+                }, 150 + Math.random() * 200); // Random glitch duration
+            }
+
+            // 2. Animate Data Temple Floor (Scrolling Grid during glitch)
+            if (isGlitching) {
+                const positions = dataFloor.geometry.attributes.position;
+                for (let i = 0; i < positions.count; i++) {
+                    // Add random data warehouse spikes
+                    if (Math.random() < 0.1) {
+                        positions.setY(i, Math.random() * 40); // Random height
+                    } else {
+                        positions.setY(i, 0); // Flat otherwise
+                    }
+                }
+                positions.needsUpdate = true;
+            }
+
+            // 3. Animate 404 Particles (Physics)
+            raycaster.setFromCamera(mouse, camera);
+            const target = new THREE.Vector3();
+            raycaster.ray.intersectPlane(planeZ, target);
+
+            const pPositions = textParticles.geometry.attributes.position;
+            
+            for (let i = 0; i < particleData.length; i++) {
+                const data = particleData[i];
+                let px = pPositions.getX(i);
+                let py = pPositions.getY(i);
+                let pz = pPositions.getZ(i);
+
+                // Mouse Repulsion
+                if (target) {
+                    const dx = target.x - px;
+                    const dy = target.y - py;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    const radius = 40;
+
+                    if (dist < radius) {
+                        const force = (radius - dist) / radius;
+                        data.vx -= (dx / dist) * force * 1.5;
+                        data.vy -= (dy / dist) * force * 1.5;
+                        data.vz -= force * 3; // Push backward
+                    }
+                }
+
+                // Return spring
+                data.vx += (data.baseX - px) * 0.04;
+                data.vy += (data.baseY - py) * 0.04;
+                data.vz += (data.baseZ - pz) * 0.04;
+
+                // Friction
+                data.vx *= 0.85;
+                data.vy *= 0.85;
+                data.vz *= 0.85;
+
+                // Glitch scatter
+                if (isGlitching && Math.random() < 0.02) {
+                    px += (Math.random() - 0.5) * 20;
+                }
+
+                pPositions.setXYZ(i, px + data.vx, py + data.vy, pz + data.vz);
+            }
+            pPositions.needsUpdate = true;
+
+            // 4. Animate Data Rain
+            rainGroup.children.forEach((points, matIndex) => {
+                const positions = points.geometry.attributes.position;
+                const colors = points.geometry.attributes.color;
+                const dataList = rainDataByMat[matIndex];
+                
+                for (let i = 0; i < dataList.length; i++) {
+                    const data = dataList[i];
+                    let px = positions.getX(i);
+                    let py = positions.getY(i) - data.speed;
+                    
+                    // Wind drift
+                    px += Math.sin(py * 0.02 + time) * 0.1;
+                    
+                    if (isGlitching && Math.random() < 0.05) {
+                        px += (Math.random() - 0.5) * 10;
+                        py -= Math.random() * 10;
+                    }
+
+                    // Dissolve before touching ground (-80 is floor, dissolve between -10 and -60)
+                    let fade = 1.0;
+                    if (py < -10) {
+                        fade = Math.max(0, (py + 60) / 50);
+                    }
+                    
+                    if (py < -60) {
+                        py = Math.random() * 100 + 300;
+                        px = (Math.random() - 0.5) * 800;
+                        positions.setZ(i, (Math.random() - 0.5) * 600 - 100);
+                        fade = 1.0;
+                    }
+                    
+                    positions.setX(i, px);
+                    positions.setY(i, py);
+                    
+                    colors.setXYZ(
+                        i, 
+                        data.baseColor.r * fade, 
+                        data.baseColor.g * fade, 
+                        data.baseColor.b * fade
+                    );
+                }
+                positions.needsUpdate = true;
+                colors.needsUpdate = true;
+            });
+
+            // 5. Parallax Camera
+            camera.position.x += (mouseScreen.x * 30 - camera.position.x) * 0.05;
+            camera.position.y += ((mouseScreen.y * 15 + 30) - camera.position.y) * 0.05;
+            camera.lookAt(0, 10, 0);
+
+            renderer.render(scene, camera);
+        }
+
+        // --- EVENT LISTENERS ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        window.addEventListener('mousemove', (event) => {
+            // Normalized coordinates for Raycaster (-1 to +1)
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Normalized for Camera Parallax
+            mouseScreen.x = (event.clientX / window.innerWidth) - 0.5;
+            mouseScreen.y = -(event.clientY / window.innerHeight) + 0.5;
+        });
+
+        // Hide mouse influence when off screen
+        window.addEventListener('mouseout', () => {
+            mouse.x = 9999; 
+            mouse.y = 9999;
+            mouseScreen.x = 0;
+            mouseScreen.y = 0;
+        });
+
+        // Boot
+        animate();
+    </script>
+</body>
