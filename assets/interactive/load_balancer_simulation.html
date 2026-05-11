@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Balancer Simulation</title>
+    <style>
+        .sim-wrapper { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; background: #faf8f5; color: #333; }
+        .sim-container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .lb-container { text-align: center; margin-bottom: 30px; }
+        .lb-box { display: inline-block; padding: 15px 30px; background: #475569; color: white; font-weight: bold; border-radius: 6px; position: relative; }
+        .servers { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px; }
+        .server { flex: 1; padding: 20px; text-align: center; background: #f1f5f9; border-radius: 6px; border: 2px solid #cbd5e1; transition: all 0.3s ease; }
+        .server.debug-on { border-color: #22c55e; background: #f0fdf4; }
+        .server.active { transform: scale(1.05); box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); border-color: #38bdf8; }
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap;}
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.2s; color: white; }
+        .btn-debug { background: #ef4444; }
+        .btn-debug:hover { background: #dc2626; }
+        .btn-normal { background: #3b82f6; }
+        .btn-normal:hover { background: #2563eb; }
+        .btn-reset { background: #64748b; }
+        .btn-reset:hover { background: #475569; }
+        .log-container { background: #1e293b; color: #a3e635; font-family: monospace; padding: 15px; height: 160px; overflow-y: auto; border-radius: 4px; font-size: 14px; text-align: left;}
+        .log-entry { margin: 0 0 5px 0; }
+        .log-debug-miss { color: #f87171; }
+        .log-debug-hit { color: #4ade80; }
+        .log-info { color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="sim-wrapper">
+        <div class="sim-container">
+            <h3 style="text-align: center; margin-top:0;">Load Balancer State Simulation</h3>
+            <p style="text-align: center; font-size: 14px; color: #64748b;">Demonstrating the failure of in-memory state across instances.</p>
+            
+            <div class="lb-container">
+                <div class="lb-box" id="lb">Load Balancer (Round Robin)</div>
+            </div>
+            
+            <div class="servers">
+                <div class="server" id="server-0">
+                    <h4 style="margin: 0 0 10px 0;">Instance 1</h4>
+                    <span class="status" style="font-size: 13px; font-weight: bold; color: #64748b;">Debug: OFF</span>
+                </div>
+                <div class="server" id="server-1">
+                    <h4 style="margin: 0 0 10px 0;">Instance 2</h4>
+                    <span class="status" style="font-size: 13px; font-weight: bold; color: #64748b;">Debug: OFF</span>
+                </div>
+                <div class="server" id="server-2">
+                    <h4 style="margin: 0 0 10px 0;">Instance 3</h4>
+                    <span class="status" style="font-size: 13px; font-weight: bold; color: #64748b;">Debug: OFF</span>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-debug" onclick="sendRequest('debug')">Send Debug Toggle Request</button>
+                <button class="btn btn-normal" onclick="sendRequest('normal')">Send Normal User Request</button>
+                <button class="btn btn-reset" onclick="resetSimulation()">Reset</button>
+            </div>
+            
+            <div class="log-container" id="log">
+                <div class="log-entry log-info">> System initialized. 3 instances ready behind load balancer.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let requestCount = 0;
+        const instances = [
+            { id: 0, debug: false },
+            { id: 1, debug: false },
+            { id: 2, debug: false }
+        ];
+
+        function log(message, type = '') {
+            const logContainer = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + type;
+            entry.textContent = '> ' + message;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function highlightServer(index) {
+            const serverEl = document.getElementById(`server-${index}`);
+            serverEl.classList.add('active');
+            setTimeout(() => serverEl.classList.remove('active'), 400);
+        }
+
+        function sendRequest(type) {
+            requestCount++;
+            const targetInstance = instances[currentIndex];
+            highlightServer(currentIndex);
+            
+            if (type === 'debug') {
+                targetInstance.debug = true;
+                const serverEl = document.getElementById(`server-${currentIndex}`);
+                serverEl.classList.add('debug-on');
+                const statusEl = serverEl.querySelector('.status');
+                statusEl.textContent = 'Debug: ON';
+                statusEl.style.color = '#15803d';
+                log(`[Req ${requestCount}] Routed to Instance ${currentIndex + 1}. In-memory debug toggled ON.`, 'log-info');
+            } else {
+                if (targetInstance.debug) {
+                    log(`[Req ${requestCount}] Routed to Instance ${currentIndex + 1}. [Debug Captured] Extra logs saved!`, 'log-debug-hit');
+                } else {
+                    log(`[Req ${requestCount}] Routed to Instance ${currentIndex + 1}. [Debug Missing] Standard processing.`, 'log-debug-miss');
+                }
+            }
+            
+            currentIndex = (currentIndex + 1) % instances.length;
+        }
+
+        function resetSimulation() {
+            currentIndex = 0;
+            requestCount = 0;
+            instances.forEach((inst, idx) => {
+                inst.debug = false;
+                const serverEl = document.getElementById(`server-${idx}`);
+                serverEl.classList.remove('debug-on');
+                const statusEl = serverEl.querySelector('.status');
+                statusEl.textContent = 'Debug: OFF';
+                statusEl.style.color = '#64748b';
+            });
+            const logContainer = document.getElementById('log');
+            logContainer.innerHTML = '<div class="log-entry log-info">> System reset. 3 instances ready.</div>';
+        }
+    </script>
+</body>
+</html>

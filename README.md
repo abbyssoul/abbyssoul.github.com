@@ -1,10 +1,10 @@
 # [abbyssoul.github.io]( https://abbyssoul.github.io)
-[![TravisCI][travis-shield]][travis-link]
+[![CI][ci-shield]][ci-link]
 
 This is my personal versioned dump of thoughts. I am sure there are many like it, but this one is mine own.
 
-[travis-shield]: https://travis-ci.org/abbyssoul/abbyssoul.github.com.svg?branch=master
-[travis-link]: https://travis-ci.org/abbyssoul/abbyssoul.github.com
+[ci-shield]: https://github.com/abbyssoul/abbyssoul.github.com/actions/workflows/ci.yml/badge.svg?branch=master
+[ci-link]: https://github.com/abbyssoul/abbyssoul.github.com/actions/workflows/ci.yml
 
 
 ## Powered by [jekyll](https://jekyllrb.com/)
