@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "New version of libstyxe supports 9p2000.u and 9p2000.L"
+description: "An overview of libstyxe's added support for the 9p2000.u and 9p2000.L distributed resource-sharing protocols."
 author: abbyssoul
 date:   2019-11-05 09:00:00 +1000
 categories: engineering

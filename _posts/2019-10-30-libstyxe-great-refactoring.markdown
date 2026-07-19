@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "libstyxe: Great Refactoring"
+description: "Why libstyxe changed its interfaces to make the 9P protocol library more extensible without abandoning its core constraints."
 author: abbyssoul
 date:   2019-10-30 12:00:00 +1000
 categories: engineering

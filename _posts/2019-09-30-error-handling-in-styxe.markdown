@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Error handling in styxe"
+description: "A practical look at how libstyxe represents parser failures and reports invalid 9P input to callers."
 date:   2019-09-30 09:00:00 +1000
 author: abbyssoul
 categories: engineering

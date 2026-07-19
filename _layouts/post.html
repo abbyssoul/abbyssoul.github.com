@@ -1,32 +1,50 @@
 ---
 layout: default
 ---
-<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-  <h1>{{ page.title }}</h1>
+{%- assign word_count = content | number_of_words -%}
+{%- assign reading_minutes = word_count | plus: 199 | divided_by: 200 -%}
+<article class="post article-shell h-entry" itemscope itemtype="https://schema.org/BlogPosting">
+  <header class="article-header">
+    <p class="eyebrow">Engineering notes</p>
+    <h1 class="post-title p-name" itemprop="headline">{{ page.title | escape }}</h1>
+    {%- if page.deck -%}
+    <p class="article-deck">{{ page.deck | escape }}</p>
+    {%- endif -%}
 
-  <header class="post-header">
-    <p class="post-meta">
+    <div class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         {{ page.date | date: date_format }}
       </time>
-      {%- if page.author -%}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
-      {%- endif -%}</p>
-  </header>
+      <span aria-hidden="true">·</span>
+      <span>{{ reading_minutes }} min read</span>
+      <span aria-hidden="true">·</span>
+      <a href="{{ '/about/' | relative_url }}" class="p-author h-card" itemprop="author" itemscope itemtype="https://schema.org/Person">
+        <span itemprop="name">{{ site.author.name }}</span>
+      </a>
+    </div>
 
-  {%- if page.tags -%}
-  Tags: {% include tags-list.html filter=page.tags %}
-  {%- endif -%}
+    {%- if page.tags -%}
+      {% include tags-list.html filter=page.tags label="Article topics" %}
+    {%- endif -%}
+  </header>
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
   </div>
+  <footer class="article-footer">
+    {% include share-bar.html %}
+    {% include related-posts.html %}
 
+    <aside class="author-card" aria-label="About the author">
+      <p class="eyebrow">Written by</p>
+      <h2>{{ site.author.name }}</h2>
+      <p>{{ site.author.bio }}</p>
+      <a href="{{ '/about/' | relative_url }}">More about Ivan →</a>
+    </aside>
 
-  {% include share-bar.html %}
-
-  {% include post-comments.html %}
+    {% include post-comments.html %}
+  </footer>
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>

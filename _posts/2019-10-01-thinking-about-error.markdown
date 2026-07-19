@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "How to think about errors in your code"
+description: "A model for reasoning about errors, invalid input, runtime failure, and isolation across applications and services."
 author: abbyssoul
 date:   2019-10-01 12:00:00 +1000
 categories: engineering

@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "libsolace is now on Conan-central"
+description: "libsolace joins Conan Center, making the C++ library easier to consume across supported platforms."
 date:   2019-10-26 13:00:00 +1000
 author: abbyssoul
 categories: [announcement]

@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Virtual filesystem: fun and profit"
+description: "How virtual filesystems turn paths into a general interface for local, remote, generated, and device-backed resources."
 date:   2019-11-25 12:00:00 +1000
 categories: engineering
 tags: [c++, engineering, vfs, kasofs]

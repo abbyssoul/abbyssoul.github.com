@@ -19,17 +19,38 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Abyss of Software Engineering
-tagline: 'A personal blog'
+tagline: 'Practical notes on building software that has to work'
 description: >- # this means to ignore newlines until "baseurl:"
-  Version controlled, persistent, personal, public memory dump of one software engineer's mind. Aka blog.
+  Practical essays on software reliability, distributed systems, testing,
+  C++, and AI-assisted engineering by Ivan Ryabov.
 domain: abbyssoul.github.io
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://abbyssoul.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+lang: en-AU
+locale: en_AU
+timezone: Australia/Sydney
 # twitter_username: abbyssoul
 github_username:  abbyssoul
 email: abyss.tech.blog@gmail.com
-# Google services
-google_analytics: UA-150379402-1
+
+author:
+  name: Ivan Ryabov
+  url: https://abbyssoul.github.io/about/
+  bio: Software engineer writing about reliability, distributed systems, testing, and the lessons hidden inside real projects.
+
+social:
+  name: Ivan Ryabov
+  links:
+    - https://github.com/abbyssoul
+    - https://www.linkedin.com/in/iryabov/
+
+logo: /assets/android-chrome-512x512.png
+
+webmaster_verifications:
+  bing: 24D56E0A1E42D8EC45CDAFD398FDA201
+
+# Add a GA4 measurement ID (G-...) here if analytics is enabled again.
+# google_analytics:
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 # avatar:
@@ -42,7 +63,7 @@ footer-links:
   flickr:
   github: abbyssoul
   instagram:
-  linkedin:
+  linkedin: iryabov
   pinterest:
   rss: any_value_enables_this
   twitter:
@@ -55,7 +76,7 @@ footer-links:
 # theme: minima
 # Set the Sass partials directory, as we're using @imports
 sass:
-  style: :expanded # You might prefer to minify using :compressed
+  style: :compressed
 
 # Use the following plug-ins
 plugins:
@@ -76,6 +97,14 @@ defaults:
       type: tags
     values:
       layout: posts_by_tag
+  -
+    scope:
+      path: ""
+      type: posts
+    values:
+      author:
+        name: Ivan Ryabov
+        url: https://abbyssoul.github.io/about/
 
 # Jekyll 3 now only supports Kramdown for Markdown
 kramdown:

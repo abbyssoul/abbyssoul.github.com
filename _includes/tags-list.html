@@ -5,12 +5,10 @@ Parameters:
   filter: array of strings representing the tags to filter in (optional)
 {% endcomment %}
 
-{% capture tagsList %}{% endcapture %}
-
-{% for tag in site.tags %}
-  {% if include.filter == nil or include.filter contains tag.slug %}
-    {% capture tagsList %}{{ tagsList }}<a class="tag badge-info" href="{{ tag.url }}">{{ tag.slug }}</a>{% endcapture %}
-  {% endif %}
-{% endfor %}
-
-{{ tagsList }}
+<nav class="tag-list" aria-label="{{ include.label | default: 'Topics' }}">
+  {% for tag in site.tags %}
+    {% if include.filter == nil or include.filter contains tag.slug %}
+      <a class="tag" href="{{ tag.url | relative_url }}">{{ tag.slug }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>

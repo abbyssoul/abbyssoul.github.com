@@ -1,0 +1,21 @@
+<figure class="article-figure">
+  <picture>
+    <source
+      type="image/webp"
+      srcset="{{ include.small | relative_url }} 768w, {{ include.large | relative_url }} 1200w"
+      sizes="(max-width: 760px) calc(100vw - 32px), 720px">
+    <img
+      src="{{ include.large | relative_url }}"
+      srcset="{{ include.small | relative_url }} 768w, {{ include.large | relative_url }} 1200w"
+      sizes="(max-width: 760px) calc(100vw - 32px), 720px"
+      width="1200"
+      height="800"
+      alt="{{ include.alt | escape }}"
+      loading="{{ include.loading | default: 'lazy' }}"
+      decoding="async"{% if include.loading == 'eager' %}
+      fetchpriority="high"{% endif %}>
+  </picture>
+  {%- if include.caption -%}
+  <figcaption>{{ include.caption }}</figcaption>
+  {%- endif -%}
+</figure>

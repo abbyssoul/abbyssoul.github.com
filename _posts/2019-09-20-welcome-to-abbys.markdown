@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Welcome to the Abyss"
+description: "Why I started a public, version-controlled notebook for software engineering ideas worth preserving."
 date:   2019-09-20 12:00:00 +1000
 author: abbyssoul
 categories: announcement

@@ -161,6 +161,15 @@ Bug reports, feature requests, and command file examples are all welcome on
 the [issue tracker](https://github.com/abbyssoul/kinjo/issues) — and if you
 build something cool with it, I'd love to know.
 
+## Behind the build
+
+Kinjo also gives me a place to write about engineering in the messier, more
+interesting real world. In
+[The crash that wasn't: debugging Kinjo's CI with AI]({% post_url 2026-07-19-the-crash-that-wasnt-debugging-kinjo-ci-with-ai %}),
+I trace a CI-only failure to a difference between tmux 3.4 and 3.5a—and explain
+how the diagnostic harness built during the investigation became the basis for
+better user-facing bug reports.
+
 ## Links
 
 - [Source on GitHub](https://github.com/abbyssoul/kinjo)

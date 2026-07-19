@@ -1,12 +1,26 @@
 ---
 layout: post
 title:  "The crash that wasn't: debugging Kinjo's CI with AI"
+description: "How human intuition and fast AI-assisted experiments traced a false Kinjo crash to a tmux version difference in CI."
+deck: "A CI-only failure, a human hunch, fast AI-assisted experiments, and diagnostic work that became part of the product."
 date:   2026-07-19 12:00:00 +1000
 categories: engineering
 tags: [engineering, reliability, testing]
+image:
+  path: /assets/images/the-crash-that-wasnt/the_kinjo_failure_that_wasnt-social.jpg
+  width: 1200
+  height: 630
+  alt: An engineer and an AI assistant tracing Kinjo's false CI crash to tmux
+thumbnail: /assets/images/the-crash-that-wasnt/the_kinjo_failure_that_wasnt-768.webp
+seo:
+  date_modified: 2026-07-19 17:00:00 +1000
 ---
 
-![Debugging with AI](/assets/images/the-crash-that-wasnt/the_kinjo_failure_that_wasnt.png)
+{% include responsive-image.html
+   small="/assets/images/the-crash-that-wasnt/the_kinjo_failure_that_wasnt-768.webp"
+   large="/assets/images/the-crash-that-wasnt/the_kinjo_failure_that_wasnt-1200.webp"
+   alt="An engineer and an AI assistant compare tmux 3.4 and 3.5a while debugging Kinjo's CI"
+   loading="eager" %}
 A CI smoke test told me [Kinjo](/projects/kinjo/) had crashed. Kinjo had actually exited successfully.
 
 That distinction took a few hours, several AI sessions, a handful of discarded
@@ -55,7 +69,10 @@ This is where AI felt genuinely enabling. Preparing every variation by hand woul
 have taken much longer. The machine did not eliminate the investigative work; it
 compressed the mechanical time between an idea and evidence about that idea.
 
-![Debugging with AI](/assets/images/the-crash-that-wasnt/guess_try_loop.png)
+{% include responsive-image.html
+   small="/assets/images/the-crash-that-wasnt/guess_try_loop-768.webp"
+   large="/assets/images/the-crash-that-wasnt/guess_try_loop-1200.webp"
+   alt="The AI-assisted debugging loop moving from hypothesis to experiment, evidence, and insight" %}
 
 ## The decisive guess was a human one
 

@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "libsolace: library philosophy"
+description: "The reliability and design principles behind libsolace, a focused collection of reusable C++ engineering primitives."
 date:   2019-10-07 12:00:00 +1000
 author: abbyssoul
 categories: engineering

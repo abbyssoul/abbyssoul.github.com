@@ -1,30 +1,21 @@
-
-//
-// VARIABLES
-//
-
-// Colors
-$blue: #4183C4;
-
-// Grays
 $black: #000;
-$darkerGray: #222;
-$darkGray: #333;
-$gray: #666;
-$lightGray: #eee;
 $white: #fff;
 
-// Font stacks
-$helvetica: Helvetica, Arial, sans-serif;
-$helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$georgia: Georgia, serif;
+$navy: #18212f;
+$navyText: #cbd5e1;
+$text: #28313d;
+$mutedDark: #4c5969;
+$muted: #657184;
+$lineDark: #aeb8c5;
+$line: #dce2e9;
+$surface: #f1f4f7;
+$surfaceBlue: #e8f1fb;
+$pageBackground: #fbfaf8;
 
-$spacing-unit:     30px !default;
+$blue: #075fae;
+$blueDark: #064b89;
+$sky: #8ac5ff;
+$focus: #e09200;
 
-
-// Mobile breakpoints
-@mixin mobile {
-  @media screen and (max-width: 640px) {
-    @content;
-  }
-}
+$sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+$mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;

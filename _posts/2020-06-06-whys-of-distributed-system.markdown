@@ -1,7 +1,13 @@
 ---
 layout: post
 title:  "This is why distributed systems are useful (and I am building one)"
+description: "Why distributed systems are worth their complexity when problems must scale across time, memory, machines, or failures."
 date:   2020-06-06 12:00:00 +1000
+image:
+  path: /assets/images/whys-of-ds/ds-intro.png
+  width: 1138
+  height: 802
+  alt: A collection of computers connected as a distributed system
 categories: engineering
 tags: [distributed, engineering, reliability, scale, philosophy]
 ---

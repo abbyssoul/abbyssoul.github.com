@@ -1,20 +1,15 @@
 <header class="site-header" role="banner">
-    {%- assign default_paths = site.pages | map: "path" -%}
-    {%- assign page_paths = site.header_pages | default: default_paths -%}
-    <div class="container">
-        {%- if site.avatar -%}
-        <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" alt="{{ site.title }}" /></a>
-        {%- endif -%}
+  <div class="container header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-brand" aria-label="{{ site.title }} home">
+      <span class="site-name">{{ site.title }}</span>
+      <span class="site-description">{{ site.tagline }}</span>
+    </a>
 
-        <div class="site-info">
-          <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
-        </div>
-
-        <nav>
-          <a href="{{ site.baseurl }}/">Blog</a>
-          <a href="{{ site.baseurl }}/projects/">Projects</a>
-          <a href="{{ site.baseurl }}/about">About</a>
-        </nav>
-
-    </div>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Writing</a>
+      <a href="{{ '/topics/' | relative_url }}"{% if page.url == '/topics/' %} aria-current="page"{% endif %}>Topics</a>
+      <a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} aria-current="page"{% endif %}>Projects</a>
+      <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
+    </nav>
+  </div>
 </header>

@@ -1,7 +1,10 @@
 ---
 layout: post
 title:  "No time for testing (in a start-up)?"
+description: "Why automated testing is part of delivering customer value—and the safety net that keeps future changes affordable."
 date:   2020-11-03 09:00:00 +1000
+seo:
+  date_modified: 2026-07-19 17:00:00 +1000
 categories: engineering
 tags: [engineering, reliability, testing, philosophy]
 ---

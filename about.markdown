@@ -2,19 +2,33 @@
 layout: page
 title: About
 permalink: /about/
+description: About Ivan Ryabov and the ideas behind Abyss of Software Engineering.
+seo:
+  type: Person
+  name: Ivan Ryabov
+  links:
+    - https://github.com/abbyssoul
+    - https://www.linkedin.com/in/iryabov/
 ---
 
-Hi there and welcome.
+Hi, I’m Ivan Ryabov, a software engineer in Sydney.
 
-My name is Ivan Ryabov and I am a software engineer and this is a personal blog space.
+I use this site as a version-controlled, public notebook for ideas that survive
+contact with real software: reliability, distributed systems, testing, C++,
+architecture, and the increasingly interesting ways humans and AI build together.
 
+The posts are personal and pragmatic. Some start with a design question; others
+start with a bug, a side project, or a belief that changed after an experiment.
+The goal is the same: preserve the useful reasoning, not just the final answer.
 
-If you would like to connect you can follow me on [github](https://github.com/abbyssoul/).
-In case you are interested in my CV here is my [LinkedIn](https://www.linkedin.com/in/iryabov/).
+You can find my open-source work on [GitHub](https://github.com/abbyssoul/),
+including [Kinjo](/projects/kinjo/), or connect with me on
+[LinkedIn](https://www.linkedin.com/in/iryabov/).
 
-Disclaimer: Any opinions expressed here are my personal and do not reflect my employers.
-All data and information provided on this site is for informational purposes only and provided as is.
+## A small disclaimer
 
-If you want to republish any of the content on other site let me know first.
+Any opinions expressed here are personal and do not reflect my employers. The
+information is provided as-is. If you would like to republish something, please
+[contact me](mailto:abyss.tech.blog@gmail.com) first.
 
-Ivan
+— Ivan
