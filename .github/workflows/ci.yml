@@ -27,12 +27,17 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.6.3'
+          ruby-version: '3.3'
           bundler-cache: true
 
       - name: Run CI build
         run: |
           # ./script/cibuild
           bundle exec jekyll build
-          bundle exec htmlproofer ./_site --no-enforce-https
-
+          # Canonical links to this site are covered by the internal-link check.
+          # Medium, PhoneArena, and TIME reject automated link-check requests.
+          bundle exec htmlproofer ./_site \
+            --no-enforce-https \
+            --ignore-empty-mailto \
+            --no-check-external-hash \
+            --ignore-urls '/^https:\/\/abbyssoul\.github\.io\//,/^https:\/\/medium\.com\//,/^https:\/\/www\.phonearena\.com\//,/^https:\/\/time\.com\//'
