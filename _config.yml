@@ -50,7 +50,7 @@ webmaster_verifications:
   bing: 24D56E0A1E42D8EC45CDAFD398FDA201
 
 # Add a GA4 measurement ID (G-...) here if analytics is enabled again.
-# google_analytics:
+google_analytics: G-PHK9Z8YPEB
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 # avatar:
